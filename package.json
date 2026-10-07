@@ -1,0 +1,35 @@
+{
+  "$schema": "https://www.raycast.com/schemas/extension.json",
+  "name": "jev-clipboard-router",
+  "type": "module",
+  "title": "Jev Clipboard Router",
+  "description": "Turn clipboard noise into one finite, inspectable next action",
+  "icon": "extension-icon.png",
+  "author": "gbesse",
+  "platforms": ["macOS", "Windows"],
+  "categories": ["Productivity"],
+  "license": "MIT",
+  "commands": [
+    {
+      "name": "route-clipboard",
+      "title": "Route Clipboard with Jev",
+      "subtitle": "Fixture-first",
+      "description": "Choose one explicit route for the current clipboard text",
+      "mode": "view"
+    }
+  ],
+  "scripts": {
+    "build": "ray build -e dist",
+    "dev": "ray develop",
+    "lint": "ray lint",
+    "test": "node --test"
+  },
+  "dependencies": {
+    "@raycast/api": "^2.7.0"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.4",
+    "@types/react": "^19.3.0",
+    "typescript": "^7.0.2"
+  }
+}
