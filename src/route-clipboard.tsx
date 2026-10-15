@@ -2,7 +2,7 @@ import { Action, ActionPanel, Clipboard, Color, Detail, Icon, showToast, Toast }
 import { useEffect, useState } from "react";
 import { acceptResponse, buildRequest, fixtureResponse, routedText, type Route } from "./core.js";
 
-type Decision = { route: Route; text: string; truncated: boolean };
+type Decision = { route: Route; text: string; originalText: string; truncated: boolean };
 
 export default function Command() {
   const [decision, setDecision] = useState<Decision>();
@@ -12,7 +12,7 @@ export default function Command() {
     Clipboard.readText()
       .then((text) => {
         const request = buildRequest(text ?? "");
-        setDecision({ route: acceptResponse(request, fixtureResponse(request)), text: request.observation.text, truncated: request.observation.truncated });
+        setDecision({ route: acceptResponse(request, fixtureResponse(request)), text: request.observation.text, originalText: text ?? "", truncated: request.observation.truncated });
       })
       .catch((cause: unknown) => setError(cause instanceof Error ? cause.message : String(cause)));
   }, []);
@@ -20,8 +20,8 @@ export default function Command() {
   if (error) return <Detail markdown={`# Clipboard not routed\n\n${error}`} />;
   if (!decision) return <Detail isLoading markdown="# Reading clipboard…" />;
 
-  const output = routedText(decision.route, decision.text);
-  const markdown = `# ${decision.route.label}\n\n> ${decision.text.replaceAll("\n", "\n> ")}\n\n**Why:** ${decision.route.reason}\n\n${decision.truncated ? "⚠️ Preview limited to 2,000 characters." : "The clipboard was processed locally."}`;
+  const output = routedText(decision.route, decision.originalText);
+  const markdown = `# ${decision.route.label}\n\n> ${decision.text.replaceAll("\n", "\n> ")}\n\n**Why:** ${decision.route.reason}\n\n${decision.truncated ? "FR : aperçu limité à 2 000 caractères ; copier conserve tout le texte. EN: preview limited to 2,000 characters; copying preserves all text. ES: vista limitada a 2 000 caracteres; copiar conserva todo el texto." : "The clipboard was processed locally."}`;
 
   return (
     <Detail
@@ -36,7 +36,9 @@ export default function Command() {
       actions={
         <ActionPanel>
           <Action.CopyToClipboard content={output} title="Copy Routed Text" />
-          <Action title="Replace Clipboard" icon={Icon.Clipboard} onAction={async () => { await Clipboard.copy(output); await showToast({ style: Toast.Style.Success, title: "Clipboard routed", message: decision.route.label }); }} />
+          <Action title="Replace Clipboard" icon={Icon.Clipboard} onAction={async () => { const current = await Clipboard.readText();
+            if (current !== decision.originalText) throw new Error('Presse-papiers modifié : refaire la revue / Clipboard changed: review again / Portapapeles cambiado: repita la revisión');
+            await Clipboard.copy(output); await showToast({ style: Toast.Style.Success, title: "Clipboard routed", message: decision.route.label }); }} />
         </ActionPanel>
       }
     />

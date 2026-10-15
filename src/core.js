@@ -6,11 +6,11 @@ const ROUTES = Object.freeze([
 ]);
 
 export function buildRequest(text, revision = 1) {
-  if (typeof text !== 'string' || !text.trim()) throw new Error('Clipboard contains no text');
-  const normalized = text.trim().slice(0, 2000);
+  if (typeof text !== 'string' || !text.trim()) throw new Error('Presse-papiers sans texte / Clipboard contains no text / Portapapeles sin texto');
+  const normalized = text.slice(0, 2000);
   return {
     revision,
-    observation: { text: normalized, truncated: text.trim().length > normalized.length },
+    observation: { text: normalized, truncated: text.length > normalized.length },
     candidates: ROUTES.map(({ id, label }) => ({ id, label })),
     contract: { choose_exactly_one: ROUTES.map(({ id }) => id) },
   };
@@ -26,14 +26,14 @@ export function fixtureResponse(request) {
 }
 
 export function acceptResponse(request, response) {
-  if (response.revision !== request.revision) throw new Error('Stale clipboard decision');
+  if (response.revision !== request.revision) throw new Error('Décision de presse-papiers périmée / Stale clipboard decision / Decisión de portapapeles caducada');
   const route = request.candidates.find((candidate) => candidate.id === response.candidate_id);
   if (!route) throw new Error('Decision escaped the finite route set');
   return { ...route, reason: String(response.reason || '') };
 }
 
 export function routedText(route, text) {
-  return `[${route.label}] ${text.trim()}`;
+  return `[${route.label}] ${text}`;
 }
 
 export { ROUTES };

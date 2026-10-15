@@ -26,5 +26,11 @@ test('clipboard input is bounded', () => {
 });
 
 test('route output remains explicit', () => {
-  assert.equal(routedText({ label: 'Archive' }, ' memo '), '[Archive] memo');
+  assert.equal(routedText({ label: 'Archive' }, ' memo '), '[Archive]  memo ');
+});
+
+test('bounded preview preserves whitespace and routed export keeps the full source',()=>{
+ const source='  '+ 'é'.repeat(3000)+'  ',request=buildRequest(source);
+ assert.equal(request.observation.text,source.slice(0,2000));assert.equal(request.observation.truncated,true);
+ assert.equal(routedText({label:'Archive'},source),'[Archive] '+source);
 });
