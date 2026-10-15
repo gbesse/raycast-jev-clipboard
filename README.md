@@ -26,3 +26,11 @@ npm run build
 The repository is structured for a future Raycast Store submission. Store publication requires the maintainer’s Raycast account and review workflow.
 
 MIT licensed. Contributions are welcome.
+
+## Lossless routed output / Sortie sans perte / Salida sin pérdidas
+
+EN: The 2,000-character preview no longer determines copied output. Routing preserves the complete original clipboard text, including whitespace, while classification remains a bounded offline fixture. Replace Clipboard checks the current text against the reviewed snapshot and refuses a changed clipboard. Copy Routed Text still copies the reviewed snapshot explicitly. The OS can change clipboard contents between checking and writing; this is no atomic clipboard lock. Raycast host behavior remains unverified outside pure-core tests and extension build.
+
+FR : L’aperçu de 2 000 caractères ne détermine plus la sortie copiée. Le routage conserve le texte original complet, espaces inclus ; la classification reste une fixture locale bornée. Remplacer vérifie le texte courant contre l’instantané et refuse un presse-papiers modifié. Copier copie explicitement l’instantané revu. Le système peut modifier le presse-papiers entre lecture et écriture : pas de verrou atomique. Le comportement hôte Raycast reste non vérifié hors tests du cœur et build.
+
+ES: La vista de 2 000 caracteres ya no determina la salida copiada. Conserva texto original completo, incluidos espacios; clasificación sigue siendo fixture local limitada. Reemplazar compara contenido actual con instantánea y rechaza cambios. Copiar copia explícitamente la instantánea revisada. El sistema puede cambiar contenido entre comprobar y escribir: no es bloqueo atómico. Comportamiento Raycast sin verificar fuera de pruebas del núcleo y build.
