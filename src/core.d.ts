@@ -5,3 +5,5 @@ export function fixtureResponse(request: Request): { revision: number; candidate
 export function acceptResponse(request: Request, response: { revision: number; candidate_id: string; reason?: string }): Route;
 export function routedText(route: Route, text: string): string;
 export const ROUTES: readonly { id: string; label: string; bias: number }[];
+
+export function replaceRoutedClipboard(originalText:string,output:string,clipboard:{readText():Promise<string|undefined>;copy(text:string):Promise<void>}):Promise<void>;

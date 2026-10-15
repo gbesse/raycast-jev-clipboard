@@ -1,6 +1,6 @@
 import { Action, ActionPanel, Clipboard, Color, Detail, Icon, showToast, Toast } from "@raycast/api";
 import { useEffect, useState } from "react";
-import { acceptResponse, buildRequest, fixtureResponse, routedText, type Route } from "./core.js";
+import { acceptResponse, buildRequest, fixtureResponse, routedText, replaceRoutedClipboard, type Route } from "./core.js";
 
 type Decision = { route: Route; text: string; originalText: string; truncated: boolean };
 
@@ -36,9 +36,7 @@ export default function Command() {
       actions={
         <ActionPanel>
           <Action.CopyToClipboard content={output} title="Copy Routed Text" />
-          <Action title="Replace Clipboard" icon={Icon.Clipboard} onAction={async () => { const current = await Clipboard.readText();
-            if (current !== decision.originalText) throw new Error('Presse-papiers modifié : refaire la revue / Clipboard changed: review again / Portapapeles cambiado: repita la revisión');
-            await Clipboard.copy(output); await showToast({ style: Toast.Style.Success, title: "Clipboard routed", message: decision.route.label }); }} />
+          <Action title="Replace Clipboard" icon={Icon.Clipboard} onAction={async () => { await replaceRoutedClipboard(decision.originalText, output, Clipboard); await showToast({ style: Toast.Style.Success, title: "Clipboard routed", message: decision.route.label }); }} />
         </ActionPanel>
       }
     />

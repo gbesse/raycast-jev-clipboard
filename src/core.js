@@ -37,3 +37,9 @@ export function routedText(route, text) {
 }
 
 export { ROUTES };
+
+export async function replaceRoutedClipboard(originalText, output, clipboard) {
+  const current = await clipboard.readText();
+  if (current !== originalText) throw new Error('Presse-papiers modifié : refaire la revue / Clipboard changed: review again / Portapapeles cambiado: repita la revisión');
+  await clipboard.copy(output);
+}
