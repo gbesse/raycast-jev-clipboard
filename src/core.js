@@ -1,13 +1,14 @@
 const ROUTES = Object.freeze([
-  { id: 'do_now', label: 'Do now', bias: 0.75 },
-  { id: 'schedule', label: 'Schedule', bias: 0.6 },
-  { id: 'archive', label: 'Archive', bias: 0.35 },
-  { id: 'review', label: 'Review deeply', bias: 0.7 },
+  Object.freeze({ id: 'do_now', label: 'Do now', bias: 0.75 }),
+  Object.freeze({ id: 'schedule', label: 'Schedule', bias: 0.6 }),
+  Object.freeze({ id: 'archive', label: 'Archive', bias: 0.35 }),
+  Object.freeze({ id: 'review', label: 'Review deeply', bias: 0.7 }),
 ]);
 
 export function buildRequest(text, revision = 1) {
   if (typeof text !== 'string' || !text.trim()) throw new Error('Presse-papiers sans texte / Clipboard contains no text / Portapapeles sin texto');
-  const normalized = text.slice(0, 2000);
+  let normalized = text.slice(0, 2000);
+  if (normalized.length < text.length && /[\uD800-\uDBFF]$/.test(normalized) && /[\uDC00-\uDFFF]/.test(text[normalized.length])) normalized = normalized.slice(0, -1);
   return {
     revision,
     observation: { text: normalized, truncated: text.length > normalized.length },

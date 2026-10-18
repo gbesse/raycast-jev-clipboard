@@ -41,3 +41,14 @@ test('changed clipboard blocks copying and unchanged snapshot copies exact outpu
  await assert.rejects(replaceRoutedClipboard('original','[Archive] original',clipboard),/Clipboard changed/);assert.deepEqual(writes,[]);
  clipboard.readText=async()=> 'original';await replaceRoutedClipboard('original','[Archive] original',clipboard);assert.deepEqual(writes,['[Archive] original']);
 });
+
+
+test('preview boundary never splits a valid surrogate pair and full export remains exact',()=>{
+ const source='x'.repeat(1999)+'😀 suffix',request=buildRequest(source);
+ assert.equal(request.observation.text,'x'.repeat(1999));assert.equal(request.observation.truncated,true);assert.equal(routedText({label:'Archive'},source),'[Archive] '+source);
+ const complete='x'.repeat(1998)+'😀';assert.equal(buildRequest(complete).observation.text,complete);assert.equal(buildRequest(complete).observation.truncated,false);
+});
+test('exported finite route entries cannot be globally rewritten',async()=>{
+ const {ROUTES}=await import('../src/core.js');assert.throws(()=>{ROUTES[0].id='injected';},TypeError);
+ assert.equal(buildRequest('text').candidates[0].id,'do_now');
+});
