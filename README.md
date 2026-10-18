@@ -34,3 +34,10 @@ EN: The 2,000-character preview no longer determines copied output. Routing pres
 FR : L’aperçu de 2 000 caractères ne détermine plus la sortie copiée. Le routage conserve le texte original complet, espaces inclus ; la classification reste une fixture locale bornée. Remplacer vérifie le texte courant contre l’instantané et refuse un presse-papiers modifié. Copier copie explicitement l’instantané revu. Le système peut modifier le presse-papiers entre lecture et écriture : pas de verrou atomique. Le comportement hôte Raycast reste non vérifié hors tests du cœur et build.
 
 ES: La vista de 2 000 caracteres ya no determina la salida copiada. Conserva texto original completo, incluidos espacios; clasificación sigue siendo fixture local limitada. Reemplazar compara contenido actual con instantánea y rechaza cambios. Copiar copia explícitamente la instantánea revisada. El sistema puede cambiar contenido entre comprobar y escribir: no es bloqueo atómico. Comportamiento Raycast sin verificar fuera de pruebas del núcleo y build.
+
+
+FR : La limite de prévisualisation reste 2 000 unités UTF-16, mais peut être réduite d’une unité pour ne pas couper une paire de substitution Unicode valide. Le texte complet exporté reste inchangé. Les quatre routes exportées sont immuables. Tests hors ligne ; aucune lecture ou écriture du presse-papiers réel ni exécution de l’hôte Raycast.
+
+EN: Preview remains capped at 2,000 UTF16 code units but may use one fewer to avoid splitting a valid Unicode surrogate pair. Full exported text remains unchanged. The four exported route entries are immutable. Offline tests; no real clipboard reads/writes or Raycast host execution.
+
+ES: La vista previa mantiene un máximo de 2.000 unidades UTF16, con una menos si evita cortar un par Unicode válido. El texto exportado completo no cambia. Las cuatro rutas exportadas son inmutables. Pruebas sin conexión; sin leer/escribir portapapeles real ni ejecutar Raycast.
